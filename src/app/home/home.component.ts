@@ -32,8 +32,17 @@ export class HomeComponent {
   filteredLocationList: HousingLocation[] = [];
 
   constructor() {
-    this.housingLocationList = this._housingService.getAllHousingLocations();
+    this.housingLocationList = [];
     this.filteredLocationList = this.housingLocationList;
+    
+    this._housingService.getAllHousingLocations().
+      then((allLocations: HousingLocation[]) => {
+        this.housingLocationList = allLocations;
+        this.filteredLocationList = this.housingLocationList;
+      }).
+      catch((reason) => {
+        console.error('Housing locations could not be retrieved from Database.');
+      });
   }
 
   filterResults(text: string): void {
