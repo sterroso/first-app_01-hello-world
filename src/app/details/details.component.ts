@@ -61,8 +61,16 @@ export class DetailsComponent {
   });
 
   constructor() {
-    const housingLocationId = Number(this._route.snapshot.params['id']);
-    this.housingLocation = this._housingService.getHousingLocationById(housingLocationId);
+    const housingLocationId = Number.parseInt(this._route.snapshot.params['id'], 10);
+    this.housingLocation = {} as HousingLocation;
+    this._housingService.getHousingLocationById(housingLocationId).
+      then((location: HousingLocation) => {
+        console.log('location', location);
+        this.housingLocation = location;
+      }).
+      catch((reason) => {
+        console.error(`Housing location with ID '${housingLocationId}' could not be retreived from Database.`);
+      });
   }
 
   submitApplication(): void {
